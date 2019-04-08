@@ -13,6 +13,12 @@ migrations:
 run:
 	docker-compose up
 
-# open an interactive shell
+# open an interactive shell in docker
 open:
 	docker-compose run web bash
+
+pyshell:
+	docker-compose run web ./manage.py shell
+
+test:
+	docker-compose run web ./manage.py test
