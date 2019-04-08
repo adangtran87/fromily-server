@@ -9,12 +9,15 @@ stages:
   - build
   - test
 
+before_script:
+  - cp fromilyserver/settings.example fromilyserver/settings.py
+
 jobs:
   include:
     - stage: build
       script:
-        - cp fromilyserver/settings.example fromilyserver/settings.py
         - make build
         - make migrations
     - stage: test
-      script: make test
+      script:
+        - make test
