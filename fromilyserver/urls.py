@@ -24,6 +24,6 @@ router.register(r'users', views.DiscordUserViewSet)
 router.register(r'servers', views.DiscordServerViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('v1/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
