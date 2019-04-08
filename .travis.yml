@@ -1,0 +1,13 @@
+service:
+  - docker
+
+stages:
+  - build
+  - test
+
+jobs:
+  include:
+    - stage: build
+      script: make build && make migrations
+    - stage: test
+      script: make test
