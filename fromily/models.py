@@ -11,7 +11,7 @@ class DiscordUser(models.Model):
 
     # Expects UserServerData excluding the server
     # Return true if successful
-    def update_userdata(self, data):
+    def update_serverdata(self, data):
         try:
             server = DiscordServer.objects.get(id=data['server'])
         except DiscordServer.DoesNotExist:
@@ -40,8 +40,8 @@ class DiscordServer (models.Model):
         return "{}:{}".format(self.server_str, self.id)
 
 class UserServerData(models.Model):
-    user = models.ForeignKey(DiscordUser, on_delete=models.CASCADE, related_name='userdata')
-    server = models.ForeignKey(DiscordServer, on_delete=models.CASCADE, related_name='serverdata')
+    user = models.ForeignKey(DiscordUser, on_delete=models.CASCADE, related_name='serverdata')
+    server = models.ForeignKey(DiscordServer, on_delete=models.CASCADE, related_name='userdata')
 
     # Dictator fields
     dpoints = models.IntegerField(default=0)

@@ -14,13 +14,13 @@ class DiscordUserTest(TestCase):
         return
 
     """
-    Tests the update_userdata method
+    Tests the update_serverdata method
 
     Expects the following data structure
     data['server'] = bigInt
     data['dpoints'] = dpoints
     """
-    def test_update_userdata_server_exists(self):
+    def test_update_serverdata_server_exists(self):
         data = {}
         data['server'] = 0
         data['dpoints'] = 100
@@ -31,20 +31,20 @@ class DiscordUserTest(TestCase):
 
         self.assertEquals(userdata.dpoints,0)
 
-        self.assertTrue(user.update_userdata(data))
+        self.assertTrue(user.update_serverdata(data))
 
         userdata.refresh_from_db()
         self.assertEquals(userdata.dpoints,data['dpoints'])
 
-    def test_update_userdata_no_server(self):
+    def test_update_serverdata_no_server(self):
         data = {}
         data['server'] = 1
         data['dpoints'] = 100
 
         user = DiscordUser.objects.get(id=0)
-        self.assertFalse(user.update_userdata(data))
+        self.assertFalse(user.update_serverdata(data))
 
-    def test_update_userdata_create_userdata(self):
+    def test_update_serverdata_create_userdata(self):
         data = {}
         data['server'] = 1
         data['dpoints'] = 100
@@ -56,7 +56,7 @@ class DiscordUserTest(TestCase):
 
         self.assertEquals(UserServerData.objects.filter(server=server).count(),0)
 
-        self.assertTrue(user.update_userdata(data))
+        self.assertTrue(user.update_serverdata(data))
         self.assertEquals(UserServerData.objects.filter(server=server).count(),1)
         userdata = UserServerData.objects.get(user=user,server=server)
         self.assertEquals(userdata.dpoints,data['dpoints'])
