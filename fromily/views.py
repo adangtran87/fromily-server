@@ -3,7 +3,7 @@ from rest_framework import status, viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from fromily.serializers import DiscordServerSerializer, DiscordUserSerializer, UserViewServerDataSerializer
+from fromily.serializers import DiscordServerSerializer, DiscordUserSerializer, UserViewServerDataSerializer, ServerViewUserDataSerializer
 # Create your views here.
 
 class DiscordUserViewSet(viewsets.ModelViewSet):
@@ -41,3 +41,10 @@ class DiscordServerViewSet(viewsets.ModelViewSet):
     queryset = DiscordServer.objects.all()
     serializer_class = DiscordServerSerializer
 
+    @action(detail=True, methods=['get'], permission_classes=[IsAuthenticatedOrReadOnly])
+    def userdata(self, request, pk=None):
+        server = self.get_object()
+        if request.method == 'GET':
+            userdata = UserServerData.objects.filter(server=server)
+            serializer = ServerViewUserDataSerializer(userdata, many=True)
+            return Response(serializer.data)

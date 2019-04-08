@@ -9,7 +9,7 @@ class DiscordUser(models.Model):
     def __str__(self):
         return"{}:{}".format(self.user_str, self.id)
 
-    # Expects UserServerData excluding the server
+    # Expects UserServerData excluding the user
     # Return true if successful
     def update_serverdata(self, data):
         try:
