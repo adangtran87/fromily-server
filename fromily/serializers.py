@@ -6,6 +6,13 @@ class DiscordUserBasicSerializer(serializers.ModelSerializer):
         model = DiscordUser
         fields = ('id', 'user_str')
 
+class DiscordUserCustomSerializer(serializers.Serializer):
+    """
+    Do not validate user id for uniqueness
+    """
+    id = serializers.IntegerField()
+    user_str = serializers.CharField(max_length=100)
+
 class DiscordServerBasicSerializer(serializers.ModelSerializer):
     class Meta:
         model = DiscordServer
@@ -22,7 +29,7 @@ class UserViewServerDataSerializer(serializers.ModelSerializer):
         fields = ('server', 'dpoints')
 
 class ServerViewUserDataSerializer(serializers.ModelSerializer):
-    user = DiscordUserBasicSerializer()
+    user = DiscordUserCustomSerializer()
     class Meta:
         model = UserServerData
         fields = ('user', 'dpoints')

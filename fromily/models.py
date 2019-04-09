@@ -37,7 +37,7 @@ class DiscordServer (models.Model):
             userdata = UserServerData(user=user, server=self)
         userdata.dpoints = data['dpoints']
         userdata.save()
-        return
+        return userdata
 
 class UserServerData(models.Model):
     user = models.ForeignKey(DiscordUser, on_delete=models.CASCADE, related_name='serverdata')
