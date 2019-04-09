@@ -14,24 +14,13 @@ class DiscordUserViewSet(viewsets.ModelViewSet):
     queryset = DiscordUser.objects.all()
     serializer_class = DiscordUserSerializer
 
-    @action(detail=True, methods=['get','post'], permission_classes=[IsAuthenticatedOrReadOnly])
+    @action(detail=True, methods=['get'], permission_classes=[IsAuthenticatedOrReadOnly])
     def serverdata(self, request, pk=None):
         user = self.get_object()
         if request.method == 'GET':
             userdata = UserServerData.objects.filter(user=user)
             serializer = UserViewServerDataSerializer(userdata, many=True)
             return Response(serializer.data)
-        elif request.method == 'POST':
-            print(request.data)
-            serializer = UserViewServerDataSerializer(data=request.data)
-            if serializer.is_valid():
-                if user.update_userdata(serializer.data):
-                    return Response(serializer.data)
-                else:
-                    return Reponse({'status': 'server does not exist'})
-            else:
-                return Response(serializer.errors,
-                                status=status.HTTP_400_BAD_REQUEST)
 
 class DiscordServerViewSet(viewsets.ModelViewSet):
     """
