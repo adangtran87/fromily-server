@@ -22,6 +22,8 @@ from fromily import views
 router = routers.DefaultRouter()
 router.register(r'users', views.DiscordUserViewSet)
 router.register(r'servers', views.DiscordServerViewSet)
+router.register(r'userserverdata', views.UserServerDataViewSet)
+router.register(r'dpoints', views.DPointRecordViewSet)
 
 urlpatterns = [
     path('v1/', include(router.urls)),

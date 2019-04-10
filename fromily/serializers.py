@@ -1,48 +1,42 @@
-from fromily.models import DiscordUser, DiscordServer, UserServerData
+from fromily.models import DiscordUser, DiscordServer, UserServerData, DPointRecord
 from rest_framework import serializers
 
-class DiscordUserBasicSerializer(serializers.ModelSerializer):
+class DPointRecordSerializer(serializers.ModelSerializer):
+    date = serializers.DateField(read_only=True)
     class Meta:
-        model = DiscordUser
-        fields = ('id', 'user_str')
-
-class DiscordUserCustomSerializer(serializers.Serializer):
-    """
-    Do not validate user id for uniqueness
-    """
-    id = serializers.IntegerField()
-    user_str = serializers.CharField(max_length=100)
-
-class DiscordServerBasicSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DiscordServer
-        fields = ('id', 'server_str')
+        model = DPointRecord
+        fields = ('userserverdata', 'points', 'reason', 'date')
 
 class UserServerDataSerializer(serializers.ModelSerializer):
+    # dpoints = serializers.IntegerField()
     class Meta:
         model = UserServerData
-        fields = ('user', 'server', 'dpoints')
+        # fields = ('user', 'server', 'dpoints')
+        fields = ('user', 'server')
 
 class UserViewServerDataSerializer(serializers.ModelSerializer):
+    dpoints = serializers.IntegerField()
     class Meta:
         model = UserServerData
         fields = ('server', 'dpoints')
 
 class ServerViewUserDataSerializer(serializers.ModelSerializer):
-    user = DiscordUserCustomSerializer()
+    dpoints = serializers.IntegerField()
     class Meta:
         model = UserServerData
         fields = ('user', 'dpoints')
 
 class DiscordServerSerializer(serializers.ModelSerializer):
-    userdata = ServerViewUserDataSerializer(many=True, required=False)
+    # userdata = ServerViewUserDataSerializer(many=True, required=False)
     class Meta:
         model = DiscordServer
-        fields = ('id', 'server_str', 'dictator', 'userdata')
+        # fields = ('id', 'server_str', 'dictator', 'userdata')
+        fields = ('id', 'server_str', 'dictator')
 
 class DiscordUserSerializer(serializers.ModelSerializer):
-    serverdata  = UserViewServerDataSerializer(many=True, required=False, read_only=True)
+    # serverdata  = UserViewServerDataSerializer(many=True, required=False, read_only=True)
     class Meta:
         model = DiscordUser
-        fields = ('id', 'user_str', 'serverdata')
+        # fields = ('id', 'user_str', 'serverdata')
+        fields = ('id', 'user_str')
 
