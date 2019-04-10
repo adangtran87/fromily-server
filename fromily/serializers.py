@@ -30,13 +30,13 @@ class DiscordServerSerializer(serializers.ModelSerializer):
     # userdata = ServerViewUserDataSerializer(many=True, required=False)
     class Meta:
         model = DiscordServer
-        # fields = ('id', 'server_str', 'dictator', 'userdata')
-        fields = ('id', 'server_str', 'dictator')
+        # fields = ('id', 'name', 'dictator', 'userdata')
+        fields = ('id', 'name', 'dictator')
 
 class DiscordUserSerializer(serializers.ModelSerializer):
     # serverdata  = UserViewServerDataSerializer(many=True, required=False, read_only=True)
     class Meta:
         model = DiscordUser
-        # fields = ('id', 'user_str', 'serverdata')
-        fields = ('id', 'user_str')
+        # fields = ('id', 'name', 'serverdata')
+        fields = ('id', 'name')
 

@@ -3,9 +3,9 @@ from fromily.models import DiscordServer, DiscordUser, UserServerData
 
 class DiscordServerTest(TestCase):
     def setUp(self):
-        user = DiscordUser(id=0, user_str='user0')
+        user = DiscordUser(id=0, name='user0')
         user.save()
-        server = DiscordServer(id=0, server_str='server0')
+        server = DiscordServer(id=0, name='server0')
         server.save()
         UserServerData.objects.create(user=user,server=server)
         return

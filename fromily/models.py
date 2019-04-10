@@ -4,21 +4,21 @@ from django.db import models
 class DiscordUser(models.Model):
     # Should match discord ID
     id = models.BigIntegerField(primary_key=True)
-    user_str = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
 
     def __str__(self):
-        return"{}:{}".format(self.user_str, self.id)
+        return"{}:{}".format(self.name, self.id)
 
 class DiscordServer (models.Model):
     # Matches discord server ID
     id = models.BigIntegerField(primary_key=True)
-    server_str = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
 
     # Dictator fields
     dictator = models.OneToOneField(DiscordUser, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
-        return "{}:{}".format(self.server_str, self.id)
+        return "{}:{}".format(self.name, self.id)
 
 class UserServerData(models.Model):
     user = models.ForeignKey(DiscordUser, on_delete=models.CASCADE, related_name='serverdata')
