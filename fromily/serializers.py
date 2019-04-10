@@ -5,7 +5,7 @@ class DPointRecordSerializer(serializers.ModelSerializer):
     date = serializers.DateField(read_only=True)
     class Meta:
         model = DPointRecord
-        fields = ('userserverdata', 'points', 'reason', 'date')
+        fields = ('points', 'reason', 'date')
 
 class UserServerDataSerializer(serializers.ModelSerializer):
     # dpoints = serializers.IntegerField()
