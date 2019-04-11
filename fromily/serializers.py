@@ -7,6 +7,16 @@ class DPointRecordSerializer(serializers.ModelSerializer):
         model = DPointRecord
         fields = ('points', 'reason', 'date')
 
+class UserServerDataSummarySerializer(serializers.ModelSerializer):
+    dpoints = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserServerData
+        fields = ('user', 'server', 'dpoints')
+
+    def get_dpoints(self, obj):
+        return obj.get_dpoints()
+
 class UserServerDataSerializer(serializers.ModelSerializer):
     dpoints = serializers.SerializerMethodField()
     dpoint_log = serializers.SerializerMethodField()

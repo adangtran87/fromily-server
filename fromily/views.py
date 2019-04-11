@@ -1,9 +1,14 @@
-from fromily.models import DiscordUser, DiscordServer, UserServerData, DPointRecord
+from django.db.models import Sum
 from rest_framework import exceptions, status, viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from fromily.serializers import DiscordServerSerializer, DiscordUserSerializer, UserServerDataSerializer, DPointRecordSerializer
+
+from fromily.models import DiscordUser, DiscordServer, UserServerData, DPointRecord
+from fromily.serializers import (
+        DiscordServerSerializer, DiscordUserSerializer, UserServerDataSerializer,
+        UserServerDataSummarySerializer, DPointRecordSerializer
+)
 # Create your views here.
 
 class DiscordUserViewSet(viewsets.ModelViewSet):
@@ -39,6 +44,20 @@ class UserServerDataViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(server=server)
         return queryset
 
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticatedOrReadOnly])
+    def leaderboard(self, request):
+        """
+        Get the top N users with points
+
+        Can be modified by queryset
+        Number of entries controlled by count
+        """
+        count = self.request.query_params.get('count', None)
+        count = count if count else 5
+        queryset = self.get_queryset()
+        queryset = queryset.annotate(points=Sum('dpoints__points')).order_by("-points")[:count]
+        serializer = UserServerDataSummarySerializer(queryset, many=True)
+        return Response(serializer.data)
 
 class DPointRecordViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)
