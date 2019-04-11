@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Sum
 
 # Create your models here.
 class DiscordUser(models.Model):
@@ -26,6 +27,12 @@ class UserServerData(models.Model):
 
     class Meta:
         unique_together = ("user", "server")
+
+    def get_dpoints(self):
+        return DPointRecord.objects.filter(userserverdata=self.id).aggregate(Sum('points'))['points__sum']
+
+    def get_dpoint_log(self, count=5):
+        return DPointRecord.objects.filter(userserverdata=self.id).order_by('-id')[:count]
 
 class DPointRecord(models.Model):
     """

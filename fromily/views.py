@@ -27,6 +27,19 @@ class UserServerDataViewSet(viewsets.ModelViewSet):
     queryset = UserServerData.objects.all()
     serializer_class = UserServerDataSerializer
 
+    def get_queryset(self):
+        queryset = UserServerData.objects.all()
+        user = self.request.query_params.get('user', None)
+        server = self.request.query_params.get('server', None)
+        if user and server:
+            queryset = queryset.filter(user=user,server=server)
+        elif user:
+            queryset = queryset.filter(user=user)
+        elif server:
+            queryset = queryset.filter(server=server)
+        return queryset
+
+
 class DPointRecordViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = DPointRecord.objects.all()

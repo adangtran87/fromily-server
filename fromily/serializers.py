@@ -8,35 +8,35 @@ class DPointRecordSerializer(serializers.ModelSerializer):
         fields = ('points', 'reason', 'date')
 
 class UserServerDataSerializer(serializers.ModelSerializer):
-    # dpoints = serializers.IntegerField()
+    dpoints = serializers.SerializerMethodField()
+    dpoint_log = serializers.SerializerMethodField()
     class Meta:
         model = UserServerData
-        # fields = ('user', 'server', 'dpoints')
-        fields = ('user', 'server')
+        fields = ('user', 'server', 'dpoints', 'dpoint_log')
+
+    def get_dpoints(self, obj):
+        return obj.get_dpoints()
+
+    def get_dpoint_log(self, obj):
+        return DPointRecordSerializer(obj.get_dpoint_log(), many=True).data
 
 class UserViewServerDataSerializer(serializers.ModelSerializer):
-    dpoints = serializers.IntegerField()
     class Meta:
         model = UserServerData
         fields = ('server', 'dpoints')
 
 class ServerViewUserDataSerializer(serializers.ModelSerializer):
-    dpoints = serializers.IntegerField()
     class Meta:
         model = UserServerData
         fields = ('user', 'dpoints')
 
 class DiscordServerSerializer(serializers.ModelSerializer):
-    # userdata = ServerViewUserDataSerializer(many=True, required=False)
     class Meta:
         model = DiscordServer
-        # fields = ('id', 'name', 'dictator', 'userdata')
         fields = ('id', 'name', 'dictator')
 
 class DiscordUserSerializer(serializers.ModelSerializer):
-    # serverdata  = UserViewServerDataSerializer(many=True, required=False, read_only=True)
     class Meta:
         model = DiscordUser
-        # fields = ('id', 'name', 'serverdata')
         fields = ('id', 'name')
 
