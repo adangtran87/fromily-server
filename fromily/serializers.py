@@ -30,23 +30,20 @@ class UserServerDataSerializer(serializers.ModelSerializer):
     def get_dpoint_log(self, obj):
         return DPointRecordSerializer(obj.get_dpoint_log(), many=True).data
 
-class UserViewServerDataSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserServerData
-        fields = ('server', 'dpoints')
-
-class ServerViewUserDataSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserServerData
-        fields = ('user', 'dpoints')
-
-class DiscordServerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DiscordServer
-        fields = ('id', 'name', 'dictator')
-
 class DiscordUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = DiscordUser
         fields = ('id', 'name')
+
+class ServerViewUserDataSerializer(serializers.ModelSerializer):
+    user = DiscordUserSerializer()
+    class Meta:
+        model = UserServerData
+        fields = ('user',)
+
+class DiscordServerSerializer(serializers.ModelSerializer):
+    userdata = ServerViewUserDataSerializer(many=True, required=False)
+    class Meta:
+        model = DiscordServer
+        fields = ('id', 'name', 'dictator', 'userdata')
 
