@@ -16,7 +16,7 @@ class DiscordServer (models.Model):
     name = models.CharField(max_length=100)
 
     # Dictator fields
-    dictator = models.OneToOneField(DiscordUser, on_delete=models.CASCADE, blank=True, null=True)
+    dictator = models.ForeignKey(DiscordUser, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return "{}:{}".format(self.name, self.id)
@@ -29,7 +29,16 @@ class UserServerData(models.Model):
         unique_together = ("user", "server")
 
     def get_dpoints(self):
-        return DPointRecord.objects.filter(userserverdata=self.id).aggregate(Sum('points'))['points__sum']
+        value = DPointRecord.objects.filter(userserverdata=self.id).aggregate(Sum('points'))['points__sum']
+        print (value)
+        if value == None:
+            return 0
+        elif value >= 2**31:
+            value = 2**31-1
+        elif value < -2**31:
+            value = -2**31
+
+        return value
 
     def get_dpoint_log(self, count=5):
         return DPointRecord.objects.filter(userserverdata=self.id).order_by('-id')[:count]
