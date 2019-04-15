@@ -45,5 +45,5 @@ class DPointRecord(models.Model):
     """
     userserverdata = models.ForeignKey(UserServerData, on_delete=models.CASCADE, related_name="dpoints")
     points = models.IntegerField()
-    reason = models.CharField(max_length=255)
+    reason = models.CharField(max_length=255, blank=True)
     date = models.DateField(auto_now_add=True)
